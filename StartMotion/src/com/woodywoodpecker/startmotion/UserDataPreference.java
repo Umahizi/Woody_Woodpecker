@@ -16,18 +16,16 @@ public class UserDataPreference {
 	}
 
 	public boolean rememeber(boolean state) {
-		if (state) {
-			mEditor.putBoolean("remember", true);
-			
-			return mEditor.commit();
-		} else {
-			mEditor.putBoolean("remember", false);
-			
-			return mEditor.commit();
-		}
+		mEditor.putBoolean("remember", state);
+
+		return ApplyAllSettings();
 	}
 
 	public boolean isLogged() {
 		return mPrefs.getBoolean("remember", false);
+	}
+
+	public boolean ApplyAllSettings() {
+		return mEditor.commit();
 	}
 }

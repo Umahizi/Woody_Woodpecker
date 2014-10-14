@@ -40,6 +40,18 @@ public class SQLiteDatabaseContentProvider {
 		return false;
 	}
 
+	public boolean registerUser(String username, String password, String email) {
+		if (username != null && password != null && email != null) {
+			String sql = "INSERT INTO Users(Username, Password, Email) VALUES('"
+					+ username + "','" + password + "','" + email + "');";
+			mDb.execSQL(sql);
+
+			return true;
+		}
+
+		return false;
+	}
+
 	public void updateUserData(String username, String password) {
 		String sql = "UPDATE Users SET Password='" + password + "' "
 				+ "WHERE Username='" + username + "';";

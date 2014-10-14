@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class HomeActivity extends Activity implements View.OnClickListener {
 	private EditText mUsernameField, mPasswordField;
-	private Button mLoginButton;
+	private Button mLoginButton, mRegButton;
 	private SQLiteDatabaseContentProvider mDatabaseInstance;
 	private Context mContext = this;
 	private CheckBox rememberUserBox;
@@ -25,18 +25,20 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 		// username
 		mUsernameField = (EditText) findViewById(R.id.editPass);
 		mPasswordField = (EditText) findViewById(R.id.editPass2);
-		mLoginButton = (Button) findViewById(R.id.button1);
+		mLoginButton = (Button) findViewById(R.id.btnLogin);
+		mRegButton = (Button) findViewById(R.id.btnRegister);
 		mLoginButton.setOnClickListener(this);
+		mRegButton.setOnClickListener(this);
 		rememberUserBox = (CheckBox) findViewById(R.id.checkBox1);
 		mDatabaseInstance = new SQLiteDatabaseContentProvider(mContext);
 		mUserInfo = new UserDataPreference(mContext);
-		
+
 		if (mUserInfo.isLogged()) {
-			//Intent intent = new Intent(HomeActivity.this, ItemActivity.class);
-			//intent.putExtra("USERNAME", "Test");
-			//startActivity(intent);
-			Toast.makeText(mContext,
-					"You are remembered already!!",
+			// Intent intent = new Intent(HomeActivity.this,
+			// ItemActivity.class);
+			// intent.putExtra("USERNAME", "Test");
+			// startActivity(intent);
+			Toast.makeText(mContext, "You are remembered already!!",
 					Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -57,7 +59,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		// TODO Auto-generated method stub
 		return super.onMenuItemSelected(featureId, item);
 	}
 
@@ -67,18 +68,18 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		
+
 		if (id == R.id.action_settings) {
 			return true;
 		}
-		
+
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	public void onClick(View v) {
 		// login button was clicked
-		if (R.id.button1 == v.getId()) {
+		if (R.id.btnLogin == v.getId()) {
 			if (!mDatabaseInstance.loginUser(mUsernameField.getText()
 					.toString(), mPasswordField.getText().toString())) {
 				Toast.makeText(mContext,
@@ -88,25 +89,29 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 				if (rememberUserBox.isChecked()) {
 					if (mUserInfo.rememeber(true)) {
 						// open the other activity
-						//Intent intent = new Intent(HomeActivity.this,
-							//	ItemActivity.class);
-						//intent.putExtra("USERNAME", "Test");
-						//startActivity(intent);
+						// Intent intent = new Intent(HomeActivity.this,
+						// ItemActivity.class);
+						// intent.putExtra("USERNAME", "Test");
+						// startActivity(intent);
 						Toast.makeText(mContext, "New Activity(remember)",
 								Toast.LENGTH_SHORT).show();
 					}
 				} else {
 					if (mUserInfo.rememeber(false)) {
 						// open the other activity
-						//Intent intent = new Intent(HomeActivity.this,
-							//	ItemActivity.class);
-						//intent.putExtra("USERNAME", "Test");
-						//startActivity(intent);
+						// Intent intent = new Intent(HomeActivity.this,
+						// ItemActivity.class);
+						// intent.putExtra("USERNAME", "Test");
+						// startActivity(intent);
 						Toast.makeText(mContext, "New Activity",
 								Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
+		} else if (R.id.btnRegister == v.getId()) {
+			Intent screenRegister = new Intent(HomeActivity.this,
+					RegisterActivity.class);
+			startActivity(screenRegister);
 		}
 	}
 }

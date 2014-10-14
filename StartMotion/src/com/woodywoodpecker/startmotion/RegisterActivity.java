@@ -1,34 +1,60 @@
 package com.woodywoodpecker.startmotion;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements View.OnClickListener {
+
+	private EditText editUser, editPass, editPassConf, editEmail;
+	private Button btnRegister;
+	private SQLiteDatabaseContentProvider mDatabaseInstance;
+
+	private void initElements() {
+		editUser = (EditText) findViewById(R.id.editUsername);
+		editPass = (EditText) findViewById(R.id.editPassword);
+		editPassConf = (EditText) findViewById(R.id.editPasswordConf);
+		editEmail = (EditText) findViewById(R.id.editEmail);
+		btnRegister = (Button) findViewById(R.id.btnRegister);
+		btnRegister.setOnClickListener(this);
+		mDatabaseInstance = new SQLiteDatabaseContentProvider(
+				getApplicationContext());
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_register);
+		setContentView(R.layout.register_layout);
+		initElements();
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.register, menu);
-		return true;
-	}
+	public void onClick(View v) {
+		if (v.getId() == R.id.btnRegister) {
+			String pass = editPass.getText().toString();
+			String confPass = editPassConf.getText().toString();
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+			if (pass.equals(confPass)) {
+				boolean isRegistered = mDatabaseInstance.registerUser(editUser
+						.getText().toString(), editPass.getText().toString(),
+						editEmail.getText().toString());
+
+				if (isRegistered) {
+					Intent startScreen = new Intent(RegisterActivity.this,
+							HomeActivity.class);
+					startActivity(startScreen);
+				} else {
+					Toast.makeText(this, "Problem with registration",
+							Toast.LENGTH_SHORT).show();
+				}
+			} else {
+				Toast.makeText(this, "No match passwords", Toast.LENGTH_SHORT)
+						.show();
+			}
 		}
-		return super.onOptionsItemSelected(item);
 	}
 }
