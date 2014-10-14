@@ -5,5 +5,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="lib" path="F:/Programs/Git/Repos/Woody_Woodpecker/StartMotion/libs/sqliteassethelper-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

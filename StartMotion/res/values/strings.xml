@@ -8,5 +8,12 @@
     <string name="title_activity_set_project">SetProjectActivity</string>
     <string name="title_activity_create">CreateActivity</string>
     <string name="title_activity_save_and_share">SaveAndShareActivity</string>
+    <string name="user_name">Username</string>
+    <string name="user_pass">Password</string>
+    <string name="user_pass_hint">Enter your password over here &#8230;</string>
+    <string name="user_name_hint">Enter your username over here &#8230;</string>
+    <string name="user_pass_data">USERNAME</string>
+    <string name="login">Login</string>
+    <string name="remember_me">Remember me</string>
 
 </resources>
