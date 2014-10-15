@@ -58,4 +58,17 @@
         android:layout_below="@+id/editEmail"
         android:text="@string/register" />
 
+    <TextView
+        android:id="@+id/wrongInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnRegister"
+        android:layout_alignBottom="@+id/btnRegister"
+        android:layout_marginLeft="46dp"
+        android:layout_marginStart="46dp"
+        android:layout_toEndOf="@+id/btnRegister"
+        android:layout_toRightOf="@+id/btnRegister"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FF0000" />
+
 </RelativeLayout>

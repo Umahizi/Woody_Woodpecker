@@ -52,6 +52,55 @@ public class SQLiteDatabaseContentProvider {
 		return false;
 	}
 
+	public boolean existUsername(String username) {
+		Cursor userCursor = null;
+
+		if (username != null) {
+			String sql = "SELECT * FROM Users WHERE Username='" + username
+					+ "';";
+
+			userCursor = mDb.rawQuery(sql, null);
+			boolean existUser = userCursor.moveToFirst();
+
+			if (existUser) {
+				// my user exist in the database record
+				userCursor.close();
+
+				return true;
+			}
+		}
+
+		if (userCursor != null) {
+			userCursor.close();
+		}
+
+		return false;
+	}
+
+	public boolean existEmail(String email) {
+		Cursor userCursor = null;
+
+		if (email != null) {
+			String sql = "SELECT * FROM Users WHERE Username='" + email + "';";
+
+			userCursor = mDb.rawQuery(sql, null);
+			boolean existUser = userCursor.moveToFirst();
+
+			if (existUser) {
+				// my user exist in the database record
+				userCursor.close();
+
+				return true;
+			}
+		}
+
+		if (userCursor != null) {
+			userCursor.close();
+		}
+
+		return false;
+	}
+
 	public void updateUserData(String username, String password) {
 		String sql = "UPDATE Users SET Password='" + password + "' "
 				+ "WHERE Username='" + username + "';";

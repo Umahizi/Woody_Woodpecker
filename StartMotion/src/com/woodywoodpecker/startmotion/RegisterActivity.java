@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
+	private static final int MIN_INPUT_LENGTH = 4;
 
 	private EditText editUser, editPass, editPassConf, editEmail;
+	private TextView wrongInput;
 	private Button btnRegister;
 	private SQLiteDatabaseContentProvider mDatabaseInstance;
 
@@ -19,6 +22,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 		editPass = (EditText) findViewById(R.id.editPassword);
 		editPassConf = (EditText) findViewById(R.id.editPasswordConf);
 		editEmail = (EditText) findViewById(R.id.editEmail);
+		wrongInput = (TextView) findViewById(R.id.wrongInput);
 		btnRegister = (Button) findViewById(R.id.btnRegister);
 		btnRegister.setOnClickListener(this);
 		mDatabaseInstance = new SQLiteDatabaseContentProvider(
@@ -35,26 +39,72 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnRegister) {
-			String pass = editPass.getText().toString();
-			String confPass = editPassConf.getText().toString();
+			wrongInput.setText("");
+			boolean isInputValid = ValidateInput();
 
-			if (pass.equals(confPass)) {
-				boolean isRegistered = mDatabaseInstance.registerUser(editUser
-						.getText().toString(), editPass.getText().toString(),
-						editEmail.getText().toString());
+			if (isInputValid) {
+				String username = editUser.getText().toString();
+				String pass = editPass.getText().toString();
+				String email = editEmail.getText().toString();
+
+				boolean isRegistered = mDatabaseInstance.registerUser(username,
+						pass, email);
 
 				if (isRegistered) {
 					Intent startScreen = new Intent(RegisterActivity.this,
 							HomeActivity.class);
 					startActivity(startScreen);
 				} else {
-					Toast.makeText(this, "Problem with registration",
-							Toast.LENGTH_SHORT).show();
+					wrongInput.setText("Problem occured during registration!");
 				}
-			} else {
-				Toast.makeText(this, "No match passwords", Toast.LENGTH_SHORT)
-						.show();
 			}
 		}
+	}
+
+	private boolean isValidEmail(CharSequence target) {
+		if (target == null) {
+			return false;
+		} else {
+			return android.util.Patterns.EMAIL_ADDRESS.matcher(target)
+					.matches();
+		}
+	}
+
+	private boolean ValidateInput() {
+		boolean result = false;
+		String username = editUser.getText().toString();
+		String pass = editPass.getText().toString();
+		String confPass = editPassConf.getText().toString();
+		String email = editEmail.getText().toString();
+
+		if (username.length() >= MIN_INPUT_LENGTH) {
+			if (!mDatabaseInstance.existUsername(username)) {
+				if (pass.equals(confPass)) {
+					if (pass.length() >= MIN_INPUT_LENGTH) {
+						if (isValidEmail(email)) {
+							if (!mDatabaseInstance.existEmail(email)) {
+								result = true;
+							} else {
+								wrongInput.setText("Email already exists!");
+							}
+						} else {
+							wrongInput.setText("Invalid email!");
+						}
+					} else {
+						wrongInput.setText("Password should be at least "
+								+ MIN_INPUT_LENGTH + " chars");
+					}
+				} else {
+					wrongInput.setText("Different Passwords");
+				}
+			} else {
+				wrongInput.setText("Username already exists!");
+			}
+		} else {
+			wrongInput.setText("Username should be at least "
+					+ MIN_INPUT_LENGTH + " chars");
+		}
+
+		return result;
 	}
 }
