@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.woodywoodpecker.startmotion.imageslist.ListImagesActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -21,10 +23,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class PhotoIntentActivity extends Activity {
+public class PhotoIntentActivity extends Activity implements OnClickListener {
 
 	private static final int ACTION_TAKE_PHOTO_B = 1;
 	private static final int ACTION_TAKE_PHOTO_S = 2;
@@ -33,6 +36,7 @@ public class PhotoIntentActivity extends Activity {
 	private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
 	private ImageView mImageView;
 	private Bitmap mImageBitmap;
+	private Button mBtnAllImages;
 
 	private String mCurrentPhotoPath;
 
@@ -219,6 +223,9 @@ public class PhotoIntentActivity extends Activity {
 		setBtnListenerOrDisable(picSBtn, mTakePicSOnClickListener,
 				MediaStore.ACTION_IMAGE_CAPTURE);
 
+		mBtnAllImages = (Button) findViewById(R.id.btnAllImages);
+		mBtnAllImages.setOnClickListener(this);
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
 			mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
 		} else {
@@ -310,4 +317,12 @@ public class PhotoIntentActivity extends Activity {
 		}
 	}
 
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == mBtnAllImages.getId()) {
+			Intent intent = new Intent(PhotoIntentActivity.this,
+					ListImagesActivity.class);
+			startActivity(intent);
+		}
+	}
 }

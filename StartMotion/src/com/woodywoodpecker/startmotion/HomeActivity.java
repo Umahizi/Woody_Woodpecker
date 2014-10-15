@@ -41,8 +41,6 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 			Intent intent = new Intent(HomeActivity.this,
 					PhotoIntentActivity.class);
 			startActivity(intent);
-		
-			
 		}
 	}
 
@@ -85,9 +83,9 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 		if (R.id.btnLogin == v.getId()) {
 			if (!mDatabaseInstance.loginUser(mUsernameField.getText()
 					.toString(), mPasswordField.getText().toString())) {
-//				Toast.makeText(mContext,
-//						"Please,press the register button to register !",
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(mContext,
+				// "Please,press the register button to register !",
+				// Toast.LENGTH_SHORT).show();
 			} else {
 				if (rememberUserBox.isChecked()) {
 					if (mUserInfo.rememeber(true)) {
@@ -110,12 +108,12 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 								Toast.LENGTH_SHORT).show();
 					}
 				}
-				
+
 				Intent intent = new Intent(HomeActivity.this,
 						PhotoIntentActivity.class);
 				startActivity(intent);
 			}
-			
+
 		} else if (R.id.btnRegister == v.getId()) {
 			Intent screenRegister = new Intent(HomeActivity.this,
 					RegisterActivity.class);

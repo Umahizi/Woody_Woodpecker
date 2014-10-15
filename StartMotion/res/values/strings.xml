@@ -9,6 +9,8 @@
     <string name="title_activity_create">CreateActivity</string>
     <string name="title_activity_save_and_share">SaveAndShareActivity</string>
     <string name="user_info">UserInfoActivity</string>
+    <string name="photo_activity">Photo Activity</string>
+    <string name="list_images_actovity">All Images listed</string>
     <string name="welcome">Welcome,please login</string>
     <string name="user_name">Username</string>
     <string name="user_pass">Password</string>
@@ -27,5 +29,7 @@
     <string name="btnIntendV">Take Video</string>
     <string name="cannot">Cannot</string>
     <string name="album_name">CameraSample</string>
+    <string name="all_images">All Images</string>
+    <string name="downloaded_images">Downloaded Images</string>
 
 </resources>
