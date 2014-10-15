@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
 	private static final int MIN_INPUT_LENGTH = 4;

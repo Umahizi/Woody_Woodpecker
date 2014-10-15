@@ -84,7 +84,11 @@ public class DatabaseService extends Service {
 				.executeSync();
 
 		if (result.getSuccess()) {
-			result.getValue();
+			ArrayList<FileObject> items = (ArrayList<FileObject>) result
+					.getValue();
+			for (FileObject item : items) {
+				Log.i("MainActivity", item.getDownloadURI());
+			}
 		}
 
 		int a = 5;
@@ -106,7 +110,7 @@ public class DatabaseService extends Service {
 				UploadFile("Futbol", "image/jpeg", is);
 				is.close();
 			} catch (IOException e) {
-				Log.i("Problem", "chetenee");
+				Log.i("Problem", "reading");
 			}
 
 			while (true) {

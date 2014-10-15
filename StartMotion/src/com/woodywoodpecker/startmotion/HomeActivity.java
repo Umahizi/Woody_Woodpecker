@@ -1,7 +1,5 @@
 package com.woodywoodpecker.startmotion;
 
-import com.telerik.everlive.sdk.core.login.GoogleLoginMethod;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class HomeActivity extends Activity implements View.OnClickListener {
 	private EditText mUsernameField, mPasswordField;
