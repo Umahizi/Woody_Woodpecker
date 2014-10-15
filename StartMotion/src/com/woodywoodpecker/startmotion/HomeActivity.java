@@ -38,8 +38,11 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 			// ItemActivity.class);
 			// intent.putExtra("USERNAME", "Test");
 			// startActivity(intent);
-			Toast.makeText(mContext, "You are remembered already!!",
-					Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(HomeActivity.this,
+					PhotoIntentActivity.class);
+			startActivity(intent);
+		
+			
 		}
 	}
 
@@ -107,7 +110,11 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 								Toast.LENGTH_SHORT).show();
 					}
 				}
+				Intent intent = new Intent(HomeActivity.this,
+						PhotoIntentActivity.class);
+				startActivity(intent);
 			}
+			
 		} else if (R.id.btnRegister == v.getId()) {
 			Intent screenRegister = new Intent(HomeActivity.this,
 					RegisterActivity.class);

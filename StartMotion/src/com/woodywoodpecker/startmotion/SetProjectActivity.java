@@ -3,8 +3,12 @@ package com.woodywoodpecker.startmotion;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,13 +17,35 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 public class SetProjectActivity extends Activity {
-
+	
+	private ListView list;
+	private CustomListViewAdapter adapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_set_project);
+	 List<RowItem> rowItems = new ArrayList<RowItem>();
+
+			this.list=(ListView) findViewById(R.id.listView1);	        
+		RowItem item= new RowItem();
+		item.setFrameNumber(0);
+		//item.setImage(R.drawable.ic_launcher);
+		RowItem item2= new RowItem();
+		item2.setFrameNumber(1);
+		//item2.setImage(R.drawable.ic_launcher);
+		
+		rowItems.add(item);
+		rowItems.add(item2);
+		
+		//this.adapter = new CustomListViewAdapter(this,
+               //R.layout.list_item, rowItems);
+       // this.list.setAdapter(adapter);
+        
+       
 	}
 
 	@Override
