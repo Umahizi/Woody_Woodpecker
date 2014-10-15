@@ -31,5 +31,7 @@
     <string name="album_name">CameraSample</string>
     <string name="all_images">All Images</string>
     <string name="downloaded_images">Downloaded Images</string>
+    <string name="invalid_iser">Invalid username or password</string>
+    
 
 </resources>

@@ -1,5 +1,7 @@
 package com.woodywoodpecker.startmotion;
 
+import com.telerik.everlive.sdk.core.login.GoogleLoginMethod;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeActivity extends Activity implements View.OnClickListener {
 	private EditText mUsernameField, mPasswordField;
+	private TextView mInvalidUser;
 	private Button mLoginButton, mRegButton;
 	private SQLiteDatabaseContentProvider mDatabaseInstance;
 	private Context mContext = this;
@@ -25,6 +29,7 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 		// username
 		mUsernameField = (EditText) findViewById(R.id.editPass);
 		mPasswordField = (EditText) findViewById(R.id.editPass2);
+		mInvalidUser = (TextView) findViewById(R.id.invalidUser);
 		mLoginButton = (Button) findViewById(R.id.btnLogin);
 		mRegButton = (Button) findViewById(R.id.btnRegister);
 		mLoginButton.setOnClickListener(this);
@@ -83,31 +88,10 @@ public class HomeActivity extends Activity implements View.OnClickListener {
 		if (R.id.btnLogin == v.getId()) {
 			if (!mDatabaseInstance.loginUser(mUsernameField.getText()
 					.toString(), mPasswordField.getText().toString())) {
-				// Toast.makeText(mContext,
-				// "Please,press the register button to register !",
-				// Toast.LENGTH_SHORT).show();
+				mInvalidUser.setVisibility(View.VISIBLE);
 			} else {
-				if (rememberUserBox.isChecked()) {
-					if (mUserInfo.rememeber(true)) {
-						// open the other activity
-						// Intent intent = new Intent(HomeActivity.this,
-						// ItemActivity.class);
-						// intent.putExtra("USERNAME", "Test");
-						// startActivity(intent);
-						Toast.makeText(mContext, "New Activity(remember)",
-								Toast.LENGTH_SHORT).show();
-					}
-				} else {
-					if (mUserInfo.rememeber(false)) {
-						// open the other activity
-						// Intent intent = new Intent(HomeActivity.this,
-						// ItemActivity.class);
-						// intent.putExtra("USERNAME", "Test");
-						// startActivity(intent);
-						Toast.makeText(mContext, "New Activity",
-								Toast.LENGTH_SHORT).show();
-					}
-				}
+				boolean state = rememberUserBox.isChecked();
+				mUserInfo.rememeber(state);
 
 				Intent intent = new Intent(HomeActivity.this,
 						PhotoIntentActivity.class);

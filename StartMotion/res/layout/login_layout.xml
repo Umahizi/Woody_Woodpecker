@@ -47,8 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnLogin"
         android:layout_alignBottom="@+id/btnLogin"
-        android:layout_alignRight="@+id/editPass2"
         android:layout_alignEnd="@+id/editPass2"
+        android:layout_alignRight="@+id/editPass2"
         android:text="@string/register" />
 
     <TextView
@@ -67,8 +67,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnLogin"
         android:layout_marginTop="18dp"
-        android:layout_toRightOf="@+id/btnLogin"
         android:layout_toEndOf="@+id/btnLogin"
+        android:layout_toRightOf="@+id/btnLogin"
         android:text="@string/remember_me" />
+
+    <TextView
+        android:id="@+id/invalidUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:text="@string/invalid_iser"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
 </RelativeLayout>
