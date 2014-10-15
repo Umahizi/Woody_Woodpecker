@@ -1,9 +1,18 @@
 package com.woodywoodpecker.startmotion;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class SetProjectActivity extends Activity {
 
@@ -31,4 +40,54 @@ public class SetProjectActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	 @SuppressLint("SdCardPath") public void onClick(View v) {
+	        Bitmap[] bitmaps = getBitmaps();
+	        new SaveGifTask().execute(bitmaps);	      
+	    }
+	 
+	public Bitmap[] getBitmaps(){
+    	Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+    
+    	Bitmap[] array= new Bitmap[]{largeIcon};
+    	
+    	return array;
+    }
+	
+	private class SaveGifTask extends AsyncTask<Bitmap, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Bitmap... params) {
+			
+			Bitmap[] bitmaps = params;
+			File outputFile = new File("/sdcard/Pictures/test.gif");
+	        FileOutputStream fos = null;
+	        try {
+	            fos = new FileOutputStream(outputFile);
+	        } catch (FileNotFoundException e) {
+	            e.printStackTrace();
+	        }
+
+	        if (fos != null) {
+	            AnimatedGifEncoder gifEncoder = new AnimatedGifEncoder();
+	            gifEncoder.start(fos);
+
+	            for (Bitmap bitmap : bitmaps) {
+	                gifEncoder.addFrame(bitmap);
+	            }
+
+	            gifEncoder.finish();
+	        }
+			
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			Log.i("Asynk","saved");
+		}
+       
+    }
 }
