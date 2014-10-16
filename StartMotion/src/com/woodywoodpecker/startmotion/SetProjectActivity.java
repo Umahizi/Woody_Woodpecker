@@ -3,6 +3,9 @@ package com.woodywoodpecker.startmotion;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +25,14 @@ public class SetProjectActivity extends Activity {
 
 	private ListView list;
 	private CustomListViewAdapter adapter;
+	ArrayList<String> stringList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_set_project);
 		List<RowItem> rowItems = new ArrayList<RowItem>();
-
+		this.stringList= new ArrayList<String>();
 		this.list = (ListView) findViewById(R.id.listView1);
 		RowItem item = new RowItem();
 		item.setFrameNumber(0);
@@ -72,11 +76,22 @@ public class SetProjectActivity extends Activity {
 	}
 
 	public Bitmap[] getBitmaps() {
-		Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
-				R.drawable.ic_launcher);
-
-		Bitmap[] array = new Bitmap[] { largeIcon };
-
+		//Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
+				//R.drawable.ic_launcher);
+		Bitmap[] array = new Bitmap[this.stringList.size()];
+		for(int i=0; i<array.length;i++ ){
+			try{
+			    String url1 = this.stringList.get(i);
+			    URL ulrn = new URL(url1);
+			    HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
+			    InputStream is = con.getInputStream();
+			    Bitmap bmp = BitmapFactory.decodeStream(is);
+			    array[i]=bmp;
+			}
+			    catch(Exception e) {
+			}
+		}
+		
 		return array;
 	}
 
@@ -85,7 +100,7 @@ public class SetProjectActivity extends Activity {
 		@Override
 		protected Void doInBackground(Bitmap... params) {
 
-			Bitmap[] bitmaps = params;
+			Bitmap[] bitmaps = getBitmaps();
 			File outputFile = new File("/sdcard/Pictures/test.gif");
 			FileOutputStream fos = null;
 			try {

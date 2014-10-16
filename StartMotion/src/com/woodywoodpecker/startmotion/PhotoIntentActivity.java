@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class PhotoIntentActivity extends Activity implements OnClickListener {
 
@@ -153,10 +154,12 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 				mCurrentPhotoPath = f.getAbsolutePath();
 				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
 						Uri.fromFile(f));
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 				f = null;
 				mCurrentPhotoPath = null;
+				
 			}
 			break;
 
