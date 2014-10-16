@@ -1,11 +1,14 @@
 package com.woodywoodpecker.startmotion;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.woodywoodpecker.startmotion.imageslist.DatabaseService;
 import com.woodywoodpecker.startmotion.imageslist.ListImagesActivity;
 
 import android.annotation.SuppressLint;
@@ -31,7 +34,7 @@ import android.widget.Toast;
 public class PhotoIntentActivity extends Activity implements OnClickListener {
 
 	private static final int ACTION_TAKE_PHOTO_B = 1;
-	//private static final int ACTION_TAKE_PHOTO_S = 2;
+	// private static final int ACTION_TAKE_PHOTO_S = 2;
 
 	private static final String BITMAP_STORAGE_KEY = "viewbitmap";
 	private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
@@ -40,6 +43,7 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 	private Button mBtnAllImages;
 
 	private String mCurrentPhotoPath;
+	private String mCurrentPhotoName;
 
 	private static final String JPEG_FILE_PREFIX = "IMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
@@ -83,6 +87,7 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
 				.format(new Date());
 		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+		mCurrentPhotoName = imageFileName;
 		File albumF = getAlbumDir();
 		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX,
 				albumF);
@@ -139,6 +144,9 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		Uri contentUri = Uri.fromFile(f);
 		mediaScanIntent.setData(contentUri);
 		this.sendBroadcast(mediaScanIntent);
+		// !!!!!!!!!!!!!!!!!!!!!!!!!
+		Check test = new Check(mCurrentPhotoPath, mCurrentPhotoName);
+		test.start();
 	}
 
 	private void dispatchTakePictureIntent(int actionCode) {
@@ -154,12 +162,12 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 				mCurrentPhotoPath = f.getAbsolutePath();
 				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
 						Uri.fromFile(f));
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				f = null;
 				mCurrentPhotoPath = null;
-				
+
 			}
 			break;
 
@@ -170,12 +178,12 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		startActivityForResult(takePictureIntent, actionCode);
 	}
 
-	/*private void handleSmallCameraPhoto(Intent intent) {
-		Bundle extras = intent.getExtras();
-		mImageBitmap = (Bitmap) extras.get("data");
-		mImageView.setImageBitmap(mImageBitmap);
-		mImageView.setVisibility(View.VISIBLE);
-	}*/
+	/*
+	 * private void handleSmallCameraPhoto(Intent intent) { Bundle extras =
+	 * intent.getExtras(); mImageBitmap = (Bitmap) extras.get("data");
+	 * mImageView.setImageBitmap(mImageBitmap);
+	 * mImageView.setVisibility(View.VISIBLE); }
+	 */
 
 	private void handleBigCameraPhoto() {
 
@@ -194,12 +202,13 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		}
 	};
 
-	/*Button.OnClickListener mTakePicSOnClickListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S);
-		}
-	};*/
+	/*
+	 * Button.OnClickListener mTakePicSOnClickListener = new
+	 * Button.OnClickListener() {
+	 * 
+	 * @Override public void onClick(View v) {
+	 * dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S); } };
+	 */
 
 	/*
 	 * Button.OnClickListener mTakeVidOnClickListener = new
@@ -222,9 +231,11 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		setBtnListenerOrDisable(picBtn, mTakePicOnClickListener,
 				MediaStore.ACTION_IMAGE_CAPTURE);
 
-		/*Button picSBtn = (Button) findViewById(R.id.btnIntendS);
-		setBtnListenerOrDisable(picSBtn, mTakePicSOnClickListener,
-				MediaStore.ACTION_IMAGE_CAPTURE);*/
+		/*
+		 * Button picSBtn = (Button) findViewById(R.id.btnIntendS);
+		 * setBtnListenerOrDisable(picSBtn, mTakePicSOnClickListener,
+		 * MediaStore.ACTION_IMAGE_CAPTURE);
+		 */
 
 		mBtnAllImages = (Button) findViewById(R.id.btnAllImages);
 		mBtnAllImages.setOnClickListener(this);
@@ -234,6 +245,10 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		} else {
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
+
+		Intent intent = new Intent(PhotoIntentActivity.this,
+				DatabaseService.class);
+		startService(intent);
 	}
 
 	@Override
@@ -246,12 +261,10 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 			break;
 		} // ACTION_TAKE_PHOTO_B
 
-		/*case ACTION_TAKE_PHOTO_S: {
-			if (resultCode == RESULT_OK) {
-				handleSmallCameraPhoto(data);
-			}
-			break;
-		} // ACTION_TAKE_PHOTO_S*/
+		/*
+		 * case ACTION_TAKE_PHOTO_S: { if (resultCode == RESULT_OK) {
+		 * handleSmallCameraPhoto(data); } break; } // ACTION_TAKE_PHOTO_S
+		 */
 
 		// ACTION_TAKE_VIDEO
 		} // switch
@@ -326,6 +339,29 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 			Intent intent = new Intent(PhotoIntentActivity.this,
 					ListImagesActivity.class);
 			startActivity(intent);
+		}
+	}
+
+	private class Check extends Thread {
+		private String path;
+		private String name;
+
+		public Check(String currentPath, String currentName) {
+			this.path = currentPath;
+			this.name = currentName;
+		}
+
+		@Override
+		public void run() {
+			super.run();
+
+			try {
+				InputStream is = new FileInputStream(this.path);
+				DatabaseService.UploadFile(this.name, "image/jpeg", is);
+				is.close();
+			} catch (IOException e) {
+				Log.i("Problem", "reading");
+			}
 		}
 	}
 }

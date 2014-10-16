@@ -58,10 +58,6 @@ public class ListImagesActivity extends Activity {
 		intentFilter.addAction(DatabaseService.MY_ACTION);
 		registerReceiver(myReceiver, intentFilter);
 
-		Intent intent = new Intent(ListImagesActivity.this,
-				DatabaseService.class);
-		startService(intent);
-
 		Button b = (Button) findViewById(R.id.cacheButton);
 		b.setOnClickListener(listener);
 	}

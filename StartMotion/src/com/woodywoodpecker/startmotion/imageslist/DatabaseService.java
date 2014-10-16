@@ -1,7 +1,5 @@
 package com.woodywoodpecker.startmotion.imageslist;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -22,7 +20,7 @@ import com.telerik.everlive.sdk.core.result.RequestResult;
 public class DatabaseService extends Service {
 	public static final String DATA_PASSED = "DATAPASSED";
 	final static String MY_ACTION = "MY_ACTION";
-	EverliveApp app;
+	static EverliveApp app;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -77,7 +75,7 @@ public class DatabaseService extends Service {
 		return downloadPath;
 	}
 
-	public void UploadFile(String fileName, String contentType,
+	public static void UploadFile(String fileName, String contentType,
 			InputStream inputStream) {
 		FileField fileField = new FileField(fileName, contentType, inputStream);
 		app.workWith().files().upload(fileField).executeSync();
