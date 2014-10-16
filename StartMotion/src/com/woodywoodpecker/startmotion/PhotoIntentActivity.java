@@ -2,9 +2,13 @@ package com.woodywoodpecker.startmotion;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +17,7 @@ import com.woodywoodpecker.startmotion.imageslist.ListImagesActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,6 +44,7 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 
 	private static final String BITMAP_STORAGE_KEY = "viewbitmap";
 	private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
+	private ProgressDialog simpleWaitDialog;
 	private ImageView mImageView;
 	private Bitmap mImageBitmap;
 	private Button mBtnAllImages;
@@ -145,8 +152,8 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		mediaScanIntent.setData(contentUri);
 		this.sendBroadcast(mediaScanIntent);
 		// !!!!!!!!!!!!!!!!!!!!!!!!!
-		Check test = new Check(mCurrentPhotoPath, mCurrentPhotoName);
-		test.start();
+		new ImageUploader().execute(new String[] { mCurrentPhotoPath,
+				mCurrentPhotoName });
 	}
 
 	private void dispatchTakePictureIntent(int actionCode) {
@@ -342,22 +349,32 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	private class Check extends Thread {
-		private String path;
-		private String name;
-
-		public Check(String currentPath, String currentName) {
-			this.path = currentPath;
-			this.name = currentName;
+	private class ImageUploader extends AsyncTask<String, Void, Void> {
+		@Override
+		protected Void doInBackground(String... params) {
+			uploadImage(params);
+			return null;
 		}
 
 		@Override
-		public void run() {
-			super.run();
+		protected void onPreExecute() {
+			Log.i("Async-Example", "onPreExecute Called");
+			simpleWaitDialog = ProgressDialog.show(PhotoIntentActivity.this,
+					"Wait", "Uploading Image");
+		}
 
+		@Override
+		protected void onPostExecute(Void result) {
+			Log.i("Async-Example", "onPostExecute Called");
+			simpleWaitDialog.dismiss();
+			Toast.makeText(PhotoIntentActivity.this,
+					"Image uploaded successfully!", Toast.LENGTH_LONG).show();
+		}
+
+		private void uploadImage(String[] params) {
 			try {
-				InputStream is = new FileInputStream(this.path);
-				DatabaseService.UploadFile(this.name, "image/jpeg", is);
+				InputStream is = new FileInputStream(params[0]);
+				DatabaseService.UploadFile(params[1], "image/jpeg", is);
 				is.close();
 			} catch (IOException e) {
 				Log.i("Problem", "reading");
