@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.telerik.everlive.sdk.core.EverliveApp;
 import com.telerik.everlive.sdk.core.facades.special.DownloadFileAsStreamFacade;
+import com.telerik.everlive.sdk.core.model.system.File;
 import com.telerik.everlive.sdk.core.query.definition.FileField;
 import com.telerik.everlive.sdk.core.result.RequestResult;
 
@@ -79,19 +80,19 @@ public class DatabaseService extends Service {
 	public void UploadFile(String fileName, String contentType,
 			InputStream inputStream) {
 		FileField fileField = new FileField(fileName, contentType, inputStream);
-
-		RequestResult<?> result = app.workWith().files().upload(fileField)
-				.executeSync();
-
-		if (result.getSuccess()) {
-			ArrayList<FileObject> items = (ArrayList<FileObject>) result
-					.getValue();
-			for (FileObject item : items) {
-				Log.i("MainActivity", item.getDownloadURI());
-			}
-		}
-
-		int a = 5;
+		app.workWith().files().upload(fileField).executeSync();
+		// RequestResult<?> result = app.workWith().files().upload(fileField)
+		// .executeSync();
+		//
+		// if (result.getSuccess()) {
+		// ArrayList<FileObject> items = (ArrayList<FileObject>) result
+		// .getValue();
+		// for (FileObject item : items) {
+		// Log.i("MainActivity", item.getDownloadURI());
+		// }
+		// }
+		//
+		// int a = 5;
 	}
 
 	private class Check extends Thread {
@@ -104,32 +105,49 @@ public class DatabaseService extends Service {
 			// Log.i("Problem", "chetenee");
 			// }
 
-			/*try {
-				InputStream is = new FileInputStream(
-						"/storage/emulated/0/Bluetooth/20141010_223603.jpg");
-				UploadFile("Futbol", "image/jpeg", is);
-				is.close();
-			} catch (IOException e) {
-				Log.i("Problem", "reading");
-			}*/
+			/*
+			 * try { InputStream is = new FileInputStream(
+			 * "/storage/emulated/0/Bluetooth/20141010_223603.jpg");
+			 * UploadFile("Futbol", "image/jpeg", is); is.close(); } catch
+			 * (IOException e) { Log.i("Problem", "reading"); }
+			 */
 
 			while (true) {
 				// try {
 				// Thread.sleep(5000);
 				Intent intent = new Intent();
 				intent.setAction(MY_ACTION);
-				RequestResult<?> allItems = app.workWith().data(Gifs.class)
-						.getAll().executeSync();
-				if (allItems.getSuccess()) {
-					ArrayList<?> boooks = (ArrayList<?>) allItems.getValue();
 
-					for (Object book : boooks) {
-						Gifs test = (Gifs) book;
-						String downloadLink = getDownloadLink(test.getData());
+				RequestResult<?> requestResult = app.workWith()
+						.data(File.class).getAll().executeSync();
+
+				if (requestResult.getSuccess()) {
+					@SuppressWarnings("unchecked")
+					ArrayList<File> allFiles = (ArrayList<File>) requestResult
+							.getValue();
+
+					for (File file : allFiles) {
+						UUID currentUuid = file.getId();
+						String downloadLink = getDownloadLink(currentUuid);
 						intent.putExtra(DATA_PASSED, downloadLink);
 						sendBroadcast(intent);
 					}
+				} else {
+					Log.i("ERROR", "BAD THING HAPPENED");
 				}
+
+				// RequestResult<?> allItems = app.workWith().data(Gifs.class)
+				// .getAll().executeSync();
+				// if (allItems.getSuccess()) {
+				// ArrayList<?> boooks = (ArrayList<?>) allItems.getValue();
+				//
+				// for (Object book : boooks) {
+				// Gifs test = (Gifs) book;
+				// String downloadLink = getDownloadLink(test.getData());
+				// intent.putExtra(DATA_PASSED, downloadLink);
+				// sendBroadcast(intent);
+				// }
+				// }
 
 				// intent.putExtra(DATA_PASSED, "123");
 
