@@ -29,7 +29,7 @@ import com.woodywoodpecker.startmotion.R;
 
 @SuppressLint("SdCardPath")
 public class ListImagesActivity extends Activity {
-	private static final String SD_CARD = "/sdcard/Pictures/test31.gif";
+	private static final String SD_CARD = "/sdcard/Pictures/test3.gif";
 
 	private ProgressDialog mSimpleWaitDialog;
 

@@ -250,7 +250,7 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		mImageView
 				.setVisibility(savedInstanceState
 						.getBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY) ? ImageView.VISIBLE
-						: ImageView.INVISIBLE);
+						: ImageView.GONE);
 	}
 
 	/**
