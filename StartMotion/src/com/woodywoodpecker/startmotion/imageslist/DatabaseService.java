@@ -104,14 +104,14 @@ public class DatabaseService extends Service {
 			// Log.i("Problem", "chetenee");
 			// }
 
-			try {
+			/*try {
 				InputStream is = new FileInputStream(
 						"/storage/emulated/0/Bluetooth/20141010_223603.jpg");
 				UploadFile("Futbol", "image/jpeg", is);
 				is.close();
 			} catch (IOException e) {
 				Log.i("Problem", "reading");
-			}
+			}*/
 
 			while (true) {
 				// try {

@@ -24,9 +24,10 @@
     <string name="remember_me">Remember me</string>
     <string name="picture"></string>
     
-    <string name="btnIntend">Take (big) Picture</string>
-    <string name="btnIntendS">Take (small) Picture</string>
-    <string name="btnIntendV">Take Video</string>
+    <string name="btnIntend">Take Picture</string>    
+    <string name="refresh">Make Gif</string>
+    <string name="instruct">Long click On Items to refresh list</string>
+    
     <string name="cannot">Cannot</string>
     <string name="album_name">CameraSample</string>
     <string name="all_images">All Images</string>

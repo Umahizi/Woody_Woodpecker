@@ -57,6 +57,7 @@
             android:name=".imageslist.ListImagesActivity"
             android:label="@string/list_images_actovity" >
         </activity>
+        <service android:name=".imageslist.DatabaseService"></service>
     </application>
 
 </manifest>

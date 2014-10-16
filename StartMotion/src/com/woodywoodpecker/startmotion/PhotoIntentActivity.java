@@ -30,7 +30,7 @@ import android.widget.ImageView;
 public class PhotoIntentActivity extends Activity implements OnClickListener {
 
 	private static final int ACTION_TAKE_PHOTO_B = 1;
-	private static final int ACTION_TAKE_PHOTO_S = 2;
+	//private static final int ACTION_TAKE_PHOTO_S = 2;
 
 	private static final String BITMAP_STORAGE_KEY = "viewbitmap";
 	private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
@@ -167,12 +167,12 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		startActivityForResult(takePictureIntent, actionCode);
 	}
 
-	private void handleSmallCameraPhoto(Intent intent) {
+	/*private void handleSmallCameraPhoto(Intent intent) {
 		Bundle extras = intent.getExtras();
 		mImageBitmap = (Bitmap) extras.get("data");
 		mImageView.setImageBitmap(mImageBitmap);
 		mImageView.setVisibility(View.VISIBLE);
-	}
+	}*/
 
 	private void handleBigCameraPhoto() {
 
@@ -191,12 +191,12 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		}
 	};
 
-	Button.OnClickListener mTakePicSOnClickListener = new Button.OnClickListener() {
+	/*Button.OnClickListener mTakePicSOnClickListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S);
 		}
-	};
+	};*/
 
 	/*
 	 * Button.OnClickListener mTakeVidOnClickListener = new
@@ -219,9 +219,9 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		setBtnListenerOrDisable(picBtn, mTakePicOnClickListener,
 				MediaStore.ACTION_IMAGE_CAPTURE);
 
-		Button picSBtn = (Button) findViewById(R.id.btnIntendS);
+		/*Button picSBtn = (Button) findViewById(R.id.btnIntendS);
 		setBtnListenerOrDisable(picSBtn, mTakePicSOnClickListener,
-				MediaStore.ACTION_IMAGE_CAPTURE);
+				MediaStore.ACTION_IMAGE_CAPTURE);*/
 
 		mBtnAllImages = (Button) findViewById(R.id.btnAllImages);
 		mBtnAllImages.setOnClickListener(this);
@@ -243,12 +243,12 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 			break;
 		} // ACTION_TAKE_PHOTO_B
 
-		case ACTION_TAKE_PHOTO_S: {
+		/*case ACTION_TAKE_PHOTO_S: {
 			if (resultCode == RESULT_OK) {
 				handleSmallCameraPhoto(data);
 			}
 			break;
-		} // ACTION_TAKE_PHOTO_S
+		} // ACTION_TAKE_PHOTO_S*/
 
 		// ACTION_TAKE_VIDEO
 		} // switch
