@@ -11,25 +11,27 @@
 
         <Button
             android:id="@+id/btnIntend"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="start"
             android:text="@string/btnIntend" />
-
-       
 
         <Button
             android:id="@+id/btnAllImages"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="end"
             android:text="@string/all_images" />
+
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="visible" />
 
 </LinearLayout>

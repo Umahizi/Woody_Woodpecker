@@ -12,6 +12,7 @@
         android:layout_height="150dip"
         android:contentDescription="@string/downloaded_images"
         android:scaleType="centerCrop"
+        android:layout_gravity="center"
         android:src="@drawable/stub" />
 
 </RelativeLayout>
