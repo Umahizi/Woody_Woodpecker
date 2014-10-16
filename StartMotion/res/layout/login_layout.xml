@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
-        android:text="@string/invalid_iser"
+        android:text="@string/invalid_user"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FF0000"
         android:visibility="gone" />

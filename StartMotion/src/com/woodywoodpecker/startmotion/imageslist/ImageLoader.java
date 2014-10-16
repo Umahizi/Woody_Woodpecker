@@ -15,16 +15,15 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.woodywoodpecker.startmotion.R;
-
-import android.os.Handler;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.widget.ImageView;
 
-public class ImageLoader {
+import com.woodywoodpecker.startmotion.R;
 
+public class ImageLoader {
 	// Initialize MemoryCache
 	MemoryCache memoryCache = new MemoryCache();
 
@@ -39,13 +38,11 @@ public class ImageLoader {
 	Handler handler = new Handler();
 
 	public ImageLoader(Context context) {
-
 		fileCache = new FileCache(context);
 
 		// Creates a thread pool that reuses a fixed number of
 		// threads operating off a shared unbounded queue.
 		executorService = Executors.newFixedThreadPool(5);
-
 	}
 
 	// default image show in list (Before online image download)
@@ -258,5 +255,4 @@ public class ImageLoader {
 		memoryCache.clear();
 		fileCache.clear();
 	}
-
 }

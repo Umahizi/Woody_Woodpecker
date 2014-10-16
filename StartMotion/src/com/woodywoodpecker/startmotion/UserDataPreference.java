@@ -6,6 +6,7 @@ import android.content.SharedPreferences.Editor;
 
 public class UserDataPreference {
 	public final static String classTag = "USER_INFO";
+
 	private SharedPreferences mPrefs;
 	private Editor mEditor;
 

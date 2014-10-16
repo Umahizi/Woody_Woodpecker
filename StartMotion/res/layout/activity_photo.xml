@@ -13,18 +13,17 @@
             android:id="@+id/btnIntend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="start"
+            android:layout_weight="1"
             android:text="@string/btnIntend" />
 
         <Button
             android:id="@+id/btnAllImages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="end"
+            android:layout_weight="1"
             android:text="@string/all_images" />
-
     </LinearLayout>
 
     <ImageView
@@ -32,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:contentDescription="@string/picture"
         android:visibility="visible" />
 
 </LinearLayout>

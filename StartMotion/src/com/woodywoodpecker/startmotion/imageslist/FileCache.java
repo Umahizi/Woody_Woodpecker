@@ -1,6 +1,7 @@
 package com.woodywoodpecker.startmotion.imageslist;
 
 import java.io.File;
+
 import android.content.Context;
 
 public class FileCache {
@@ -8,9 +9,7 @@ public class FileCache {
 	private File cacheDir;
 
 	public FileCache(Context context) {
-
 		// Find the dir at SDCARD to save cached images
-
 		if (android.os.Environment.getExternalStorageState().equals(
 				android.os.Environment.MEDIA_MOUNTED)) {
 			// if SDCARD is mounted (SDCARD is present on device and mounted)
@@ -34,18 +33,21 @@ public class FileCache {
 		String filename = String.valueOf(url.hashCode());
 
 		File f = new File(cacheDir, filename);
-		return f;
 
+		return f;
 	}
 
 	public void clear() {
 		// list all files inside cache directory
 		File[] files = cacheDir.listFiles();
-		if (files == null)
-			return;
-		// delete all cache directory files
-		for (File f : files)
-			f.delete();
-	}
 
+		if (files == null) {
+			return;
+		}
+
+		// delete all cache directory files
+		for (File f : files) {
+			f.delete();
+		}
+	}
 }

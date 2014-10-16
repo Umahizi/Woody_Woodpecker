@@ -11,22 +11,13 @@ import android.widget.TextView;
 public class RegisterActivity extends Activity implements View.OnClickListener {
 	private static final int MIN_INPUT_LENGTH = 4;
 
-	private EditText editUser, editPass, editPassConf, editEmail;
-	private TextView wrongInput;
-	private Button btnRegister;
+	private EditText mEditUser;
+	private EditText mEditPass;
+	private EditText mEditPassConf;
+	private EditText mEditEmail;
+	private TextView mWrongInput;
+	private Button mBtnRegister;
 	private SQLiteDatabaseContentProvider mDatabaseInstance;
-
-	private void initElements() {
-		editUser = (EditText) findViewById(R.id.editUsername);
-		editPass = (EditText) findViewById(R.id.editPassword);
-		editPassConf = (EditText) findViewById(R.id.editPasswordConf);
-		editEmail = (EditText) findViewById(R.id.editEmail);
-		wrongInput = (TextView) findViewById(R.id.wrongInput);
-		btnRegister = (Button) findViewById(R.id.btnRegister);
-		btnRegister.setOnClickListener(this);
-		mDatabaseInstance = new SQLiteDatabaseContentProvider(
-				getApplicationContext());
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +29,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnRegister) {
-			wrongInput.setText("");
+			mWrongInput.setText("");
 			boolean isInputValid = ValidateInput();
 
 			if (isInputValid) {
-				String username = editUser.getText().toString();
-				String pass = editPass.getText().toString();
-				String email = editEmail.getText().toString();
+				String username = mEditUser.getText().toString();
+				String pass = mEditPass.getText().toString();
+				String email = mEditEmail.getText().toString();
 
 				boolean isRegistered = mDatabaseInstance.registerUser(username,
 						pass, email);
@@ -54,10 +45,22 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 							HomeActivity.class);
 					startActivity(startScreen);
 				} else {
-					wrongInput.setText("Problem occured during registration!");
+					mWrongInput.setText("Problem occured during registration!");
 				}
 			}
 		}
+	}
+
+	private void initElements() {
+		mEditUser = (EditText) findViewById(R.id.editUsername);
+		mEditPass = (EditText) findViewById(R.id.editPassword);
+		mEditPassConf = (EditText) findViewById(R.id.editPasswordConf);
+		mEditEmail = (EditText) findViewById(R.id.editEmail);
+		mWrongInput = (TextView) findViewById(R.id.wrongInput);
+		mBtnRegister = (Button) findViewById(R.id.btnRegister);
+		mBtnRegister.setOnClickListener(this);
+		mDatabaseInstance = new SQLiteDatabaseContentProvider(
+				getApplicationContext());
 	}
 
 	private boolean isValidEmail(CharSequence target) {
@@ -71,10 +74,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
 	private boolean ValidateInput() {
 		boolean result = false;
-		String username = editUser.getText().toString();
-		String pass = editPass.getText().toString();
-		String confPass = editPassConf.getText().toString();
-		String email = editEmail.getText().toString();
+		String username = mEditUser.getText().toString();
+		String pass = mEditPass.getText().toString();
+		String confPass = mEditPassConf.getText().toString();
+		String email = mEditEmail.getText().toString();
 
 		if (username.length() >= MIN_INPUT_LENGTH) {
 			if (!mDatabaseInstance.existUsername(username)) {
@@ -84,23 +87,23 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 							if (!mDatabaseInstance.existEmail(email)) {
 								result = true;
 							} else {
-								wrongInput.setText("Email already exists!");
+								mWrongInput.setText("Email already exists!");
 							}
 						} else {
-							wrongInput.setText("Invalid email!");
+							mWrongInput.setText("Invalid email!");
 						}
 					} else {
-						wrongInput.setText("Password should be at least "
+						mWrongInput.setText("Password should be at least "
 								+ MIN_INPUT_LENGTH + " chars");
 					}
 				} else {
-					wrongInput.setText("Different Passwords");
+					mWrongInput.setText("Different Passwords");
 				}
 			} else {
-				wrongInput.setText("Username already exists!");
+				mWrongInput.setText("Username already exists!");
 			}
 		} else {
-			wrongInput.setText("Username should be at least "
+			mWrongInput.setText("Username should be at least "
 					+ MIN_INPUT_LENGTH + " chars");
 		}
 

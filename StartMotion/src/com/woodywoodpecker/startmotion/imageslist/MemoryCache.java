@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -29,7 +30,6 @@ public class MemoryCache {
 	}
 
 	public void setLimit(long new_limit) {
-
 		limit = new_limit;
 		Log.i(TAG, "MemoryCache will use up to " + limit / 1024. / 1024. + "MB");
 	}
@@ -71,7 +71,7 @@ public class MemoryCache {
 				if (size <= limit)
 					break;
 			}
-			
+
 			Log.i(TAG, "Clean cache. New size " + cache.size());
 		}
 	}
@@ -88,8 +88,10 @@ public class MemoryCache {
 	}
 
 	long getSizeInBytes(Bitmap bitmap) {
-		if (bitmap == null)
+		if (bitmap == null) {
 			return 0;
+		}
+
 		return bitmap.getRowBytes() * bitmap.getHeight();
 	}
 }

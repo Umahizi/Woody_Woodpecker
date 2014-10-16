@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -34,22 +34,6 @@
             android:label="@string/title_activity_register" >
         </activity>
         <activity
-            android:name=".SetProjectActivity"
-            android:label="@string/title_activity_set_project" >
-        </activity>
-        <activity
-            android:name=".CreateActivity"
-            android:label="@string/title_activity_create" >
-        </activity>
-        <activity
-            android:name=".SaveAndShareActivity"
-            android:label="@string/title_activity_save_and_share" >
-        </activity>
-        <activity
-            android:name=".UserInfo"
-            android:label="@string/user_info" >
-        </activity>
-        <activity
             android:name=".PhotoIntentActivity"
             android:label="@string/photo_activity" >
         </activity>
@@ -57,7 +41,9 @@
             android:name=".imageslist.ListImagesActivity"
             android:label="@string/list_images_actovity" >
         </activity>
-        <service android:name=".imageslist.DatabaseService"></service>
+
+        <service android:name=".imageslist.DatabaseService" >
+        </service>
     </application>
 
 </manifest>

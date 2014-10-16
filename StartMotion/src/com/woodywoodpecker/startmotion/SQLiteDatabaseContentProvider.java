@@ -6,11 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class SQLiteDatabaseContentProvider {
 	private SQLiteManager mManager;
-	private Context context;
 	private SQLiteDatabase mDb;
 
 	public SQLiteDatabaseContentProvider(Context context) {
-		this.context = context;
 		this.mManager = new SQLiteManager(context);
 		mDb = mManager.getReadableDatabase();
 	}
@@ -99,11 +97,5 @@ public class SQLiteDatabaseContentProvider {
 		}
 
 		return false;
-	}
-
-	public void updateUserData(String username, String password) {
-		String sql = "UPDATE Users SET Password='" + password + "' "
-				+ "WHERE Username='" + username + "';";
-		mDb.execSQL(sql);
 	}
 }

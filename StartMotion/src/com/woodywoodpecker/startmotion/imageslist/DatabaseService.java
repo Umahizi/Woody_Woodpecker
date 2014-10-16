@@ -7,9 +7,6 @@ import java.util.UUID;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
-//import java.awt.image.BufferedImage;
-//import javax.imageio.ImageIO;
 
 import com.telerik.everlive.sdk.core.EverliveApp;
 import com.telerik.everlive.sdk.core.facades.special.DownloadFileAsStreamFacade;
@@ -19,8 +16,11 @@ import com.telerik.everlive.sdk.core.result.RequestResult;
 
 public class DatabaseService extends Service {
 	public static final String DATA_PASSED = "DATAPASSED";
-	final static String MY_ACTION = "MY_ACTION";
-	static EverliveApp app;
+	public static final String MY_ACTION = "MY_ACTION";
+
+	private static final String API_KEY = "jBbtYae7LxkPAump";
+
+	private static EverliveApp app;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -30,7 +30,7 @@ public class DatabaseService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		app = new EverliveApp("jBbtYae7LxkPAump");
+		app = new EverliveApp(API_KEY);
 		app.workWith().authentication().login("telerik_test", "1234")
 				.executeSync();
 	}
@@ -48,25 +48,6 @@ public class DatabaseService extends Service {
 		super.onDestroy();
 	}
 
-	// private void addItems() throws IOException {
-	// // create books
-	// // for (int start = 0; start < 8; start++) {
-	// String base64 =
-	// encodeFileToBase64Binary("/storage/emulated/0/Bluetooth/20141010_223603.jpg");
-	// // UUID filaAsUUID = decode(base64);
-	// // File dido = new File("");
-	//
-	// // Base64.encode(FieldUtils.readFileToByteArray(file));
-	//
-	// UUID uuid = UUID.fromString(base64);
-	// Gifs testBook = new Gifs();
-	// testBook.setName("Are be moooi");
-	// testBook.setData(uuid);
-	// // app.fi
-	// app.workWith().data(Gifs.class).create(testBook).executeAsync();
-	// // }
-	// }
-
 	public String getDownloadLink(UUID fileId) {
 		DownloadFileAsStreamFacade file = app.workWith().files()
 				.download(fileId);
@@ -79,40 +60,14 @@ public class DatabaseService extends Service {
 			InputStream inputStream) {
 		FileField fileField = new FileField(fileName, contentType, inputStream);
 		app.workWith().files().upload(fileField).executeSync();
-		// RequestResult<?> result = app.workWith().files().upload(fileField)
-		// .executeSync();
-		//
-		// if (result.getSuccess()) {
-		// ArrayList<FileObject> items = (ArrayList<FileObject>) result
-		// .getValue();
-		// for (FileObject item : items) {
-		// Log.i("MainActivity", item.getDownloadURI());
-		// }
-		// }
-		//
-		// int a = 5;
 	}
 
 	private class Check extends Thread {
 		@Override
 		public void run() {
 			super.run();
-			// try {
-			// addItems();
-			// } catch (IOException e) {
-			// Log.i("Problem", "chetenee");
-			// }
-
-			/*
-			 * try { InputStream is = new FileInputStream(
-			 * "/storage/emulated/0/Bluetooth/20141010_223603.jpg");
-			 * UploadFile("Futbol", "image/jpeg", is); is.close(); } catch
-			 * (IOException e) { Log.i("Problem", "reading"); }
-			 */
 
 			while (true) {
-				// try {
-				// Thread.sleep(5000);
 				Intent intent = new Intent();
 				intent.setAction(MY_ACTION);
 
@@ -130,28 +85,7 @@ public class DatabaseService extends Service {
 						intent.putExtra(DATA_PASSED, downloadLink);
 						sendBroadcast(intent);
 					}
-				} else {
-					Log.i("ERROR", "BAD THING HAPPENED");
 				}
-
-				// RequestResult<?> allItems = app.workWith().data(Gifs.class)
-				// .getAll().executeSync();
-				// if (allItems.getSuccess()) {
-				// ArrayList<?> boooks = (ArrayList<?>) allItems.getValue();
-				//
-				// for (Object book : boooks) {
-				// Gifs test = (Gifs) book;
-				// String downloadLink = getDownloadLink(test.getData());
-				// intent.putExtra(DATA_PASSED, downloadLink);
-				// sendBroadcast(intent);
-				// }
-				// }
-
-				// intent.putExtra(DATA_PASSED, "123");
-
-				// } catch (InterruptedException e) {
-				// e.printStackTrace();
-				// }
 			}
 		}
 	}

@@ -7,9 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import com.woodywoodpecker.startmotion.AnimatedGifEncoder;
-import com.woodywoodpecker.startmotion.R;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -21,47 +18,45 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.woodywoodpecker.startmotion.AnimatedGifEncoder;
+import com.woodywoodpecker.startmotion.R;
+
 @SuppressLint("SdCardPath")
 public class ListImagesActivity extends Activity {
 	private static final String SD_CARD = "/sdcard/Pictures/test31.gif";
 
-	private ProgressDialog simpleWaitDialog;
+	private ProgressDialog mSimpleWaitDialog;
 
-	ListView list;
-	LazyImageLoadAdapter adapter;
-	ArrayList<String> stringList;
-	MyReceiver myReceiver;
+	private ListView mList;
+	private LazyImageLoadAdapter mAdapter;
+	private ArrayList<String> mStringList;
+	private MyReceiver mMyReceiver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_images);
-		stringList = new ArrayList<String>();
-		// stringList
-		// .add("http://androidexample.com/media/webservice/LazyListView_images/image0.png");
-		// stringList
-		// .add("http://androidexample.com/media/webservice/LazyListView_images/image1.png");
+		mStringList = new ArrayList<String>();
 
-		list = (ListView) findViewById(R.id.listImages);
+		mList = (ListView) findViewById(R.id.listImages);
 
 		// Create custom adapter for listview
-		adapter = new LazyImageLoadAdapter(this, stringList);
+		mAdapter = new LazyImageLoadAdapter(this, mStringList);
 
 		// Set adapter to listview
-		list.setAdapter(adapter);
+		mList.setAdapter(mAdapter);
 
-		myReceiver = new MyReceiver();
+		mMyReceiver = new MyReceiver();
 
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(DatabaseService.MY_ACTION);
-		registerReceiver(myReceiver, intentFilter);
+		registerReceiver(mMyReceiver, intentFilter);
 
 		Button b = (Button) findViewById(R.id.cacheButton);
 		b.setOnClickListener(listener);
@@ -70,42 +65,29 @@ public class ListImagesActivity extends Activity {
 	@Override
 	public void onDestroy() {
 		// Remove adapter refference from list
-		list.setAdapter(null);
+		mList.setAdapter(null);
 		super.onDestroy();
 	}
 
 	@Override
 	protected void onStop() {
-		unregisterReceiver(myReceiver);
+		unregisterReceiver(mMyReceiver);
 		super.onStop();
 	}
 
 	public OnClickListener listener = new OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-
-			// Refresh cache directory downloaded images
-			// adapter.imageLoader.clearCache();
-			// adapter.notifyDataSetChanged();
-			// Bitmap[] bitmaps = new Bitmap[stringList.size()];
-			// String[] stringArray = new String[stringList.size()];
-			// stringArray = stringList.toArray(stringArray);
-			// new BitmapLoader().execute(stringArray);
-			new GifUploader().execute(stringList.toArray());
+			new GifUploader().execute(mStringList.toArray());
 		}
 	};
 
 	public void onItemClick(int mPosition) {
-		String tempValues = stringList.get(mPosition);
+		String currentUrl = mStringList.get(mPosition);
 
-		Toast.makeText(ListImagesActivity.this, "Image URL : " + tempValues,
+		Toast.makeText(ListImagesActivity.this, "Image URL : " + currentUrl,
 				Toast.LENGTH_LONG).show();
 	}
-
-	/*
-	 * public void createGif(){ //Bitmap[] bitmaps = getBitmaps(); new
-	 * SaveGifTask().execute(getBitmaps()); }
-	 */
 
 	private class MyReceiver extends BroadcastReceiver {
 		@Override
@@ -114,15 +96,9 @@ public class ListImagesActivity extends Activity {
 			String datapassed = arg1
 					.getStringExtra(DatabaseService.DATA_PASSED);
 
-			if (!stringList.contains(datapassed)) {
-				stringList.add(datapassed);
-
-				adapter.notifyDataSetChanged();
-				// Toast.makeText(
-				// MainActivity.this,
-				// "Triggered by Service!\n" + "Data passed: "
-				// + String.valueOf(datapassed), Toast.LENGTH_LONG)
-				// .show();
+			if (!mStringList.contains(datapassed)) {
+				mStringList.add(datapassed);
+				mAdapter.notifyDataSetChanged();
 			}
 		}
 	}
@@ -136,15 +112,13 @@ public class ListImagesActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			Log.i("Async-Example", "onPreExecute Called");
-			simpleWaitDialog = ProgressDialog.show(ListImagesActivity.this,
+			mSimpleWaitDialog = ProgressDialog.show(ListImagesActivity.this,
 					"Wait", "Creating GIF");
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.i("Async-Example", "onPostExecute Called");
-			simpleWaitDialog.dismiss();
+			mSimpleWaitDialog.dismiss();
 			Toast.makeText(ListImagesActivity.this, "GIF added at " + SD_CARD,
 					Toast.LENGTH_LONG).show();
 		}

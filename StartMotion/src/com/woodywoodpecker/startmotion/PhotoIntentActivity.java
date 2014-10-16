@@ -2,18 +2,11 @@ package com.woodywoodpecker.startmotion;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.woodywoodpecker.startmotion.imageslist.DatabaseService;
-import com.woodywoodpecker.startmotion.imageslist.ListImagesActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -37,23 +30,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class PhotoIntentActivity extends Activity implements OnClickListener {
+import com.woodywoodpecker.startmotion.imageslist.DatabaseService;
+import com.woodywoodpecker.startmotion.imageslist.ListImagesActivity;
 
+public class PhotoIntentActivity extends Activity implements OnClickListener {
 	private static final int ACTION_TAKE_PHOTO_B = 1;
-	// private static final int ACTION_TAKE_PHOTO_S = 2;
 
 	private static final String BITMAP_STORAGE_KEY = "viewbitmap";
 	private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
-	private ProgressDialog simpleWaitDialog;
+
+	private static final String JPEG_FILE_PREFIX = "IMG_";
+	private static final String JPEG_FILE_SUFFIX = ".jpg";
+
+	private ProgressDialog mSimpleWaitDialog;
 	private ImageView mImageView;
 	private Bitmap mImageBitmap;
 	private Button mBtnAllImages;
 
 	private String mCurrentPhotoPath;
 	private String mCurrentPhotoName;
-
-	private static final String JPEG_FILE_PREFIX = "IMG_";
-	private static final String JPEG_FILE_SUFFIX = ".jpg";
 
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
@@ -79,7 +74,6 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 					}
 				}
 			}
-
 		} else {
 			Log.v(getString(R.string.app_name),
 					"External storage is not mounted READ/WRITE.");
@@ -98,11 +92,11 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		File albumF = getAlbumDir();
 		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX,
 				albumF);
+
 		return imageF;
 	}
 
 	private File setUpPhotoFile() throws IOException {
-
 		File f = createImageFile();
 		mCurrentPhotoPath = f.getAbsolutePath();
 
@@ -110,7 +104,6 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 	}
 
 	private void setPic() {
-
 		/* There isn't enough memory to open up more than a couple camera photos */
 		/* So pre-scale the target bitmap into which the file is decoded */
 
@@ -127,6 +120,7 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 
 		/* Figure out which way needs to be reduced less */
 		int scaleFactor = 1;
+
 		if ((targetW > 0) || (targetH > 0)) {
 			scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 		}
@@ -151,13 +145,11 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		Uri contentUri = Uri.fromFile(f);
 		mediaScanIntent.setData(contentUri);
 		this.sendBroadcast(mediaScanIntent);
-		// !!!!!!!!!!!!!!!!!!!!!!!!!
 		new ImageUploader().execute(new String[] { mCurrentPhotoPath,
 				mCurrentPhotoName });
 	}
 
 	private void dispatchTakePictureIntent(int actionCode) {
-
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 		switch (actionCode) {
@@ -176,30 +168,21 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 				mCurrentPhotoPath = null;
 
 			}
-			break;
 
+			break;
 		default:
 			break;
-		} // switch
+		}
 
 		startActivityForResult(takePictureIntent, actionCode);
 	}
 
-	/*
-	 * private void handleSmallCameraPhoto(Intent intent) { Bundle extras =
-	 * intent.getExtras(); mImageBitmap = (Bitmap) extras.get("data");
-	 * mImageView.setImageBitmap(mImageBitmap);
-	 * mImageView.setVisibility(View.VISIBLE); }
-	 */
-
 	private void handleBigCameraPhoto() {
-
 		if (mCurrentPhotoPath != null) {
 			setPic();
 			galleryAddPic();
 			mCurrentPhotoPath = null;
 		}
-
 	}
 
 	Button.OnClickListener mTakePicOnClickListener = new Button.OnClickListener() {
@@ -208,21 +191,6 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 			dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
 		}
 	};
-
-	/*
-	 * Button.OnClickListener mTakePicSOnClickListener = new
-	 * Button.OnClickListener() {
-	 * 
-	 * @Override public void onClick(View v) {
-	 * dispatchTakePictureIntent(ACTION_TAKE_PHOTO_S); } };
-	 */
-
-	/*
-	 * Button.OnClickListener mTakeVidOnClickListener = new
-	 * Button.OnClickListener() {
-	 * 
-	 * @Override public void onClick(View v) { //dispatchTakeVideoIntent(); } };
-	 */
 
 	/** Called when the activity is first created. */
 	@Override
@@ -237,12 +205,6 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		Button picBtn = (Button) findViewById(R.id.btnIntend);
 		setBtnListenerOrDisable(picBtn, mTakePicOnClickListener,
 				MediaStore.ACTION_IMAGE_CAPTURE);
-
-		/*
-		 * Button picSBtn = (Button) findViewById(R.id.btnIntendS);
-		 * setBtnListenerOrDisable(picSBtn, mTakePicSOnClickListener,
-		 * MediaStore.ACTION_IMAGE_CAPTURE);
-		 */
 
 		mBtnAllImages = (Button) findViewById(R.id.btnAllImages);
 		mBtnAllImages.setOnClickListener(this);
@@ -261,31 +223,22 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case ACTION_TAKE_PHOTO_B: {
+		case ACTION_TAKE_PHOTO_B:
 			if (resultCode == RESULT_OK) {
 				handleBigCameraPhoto();
 			}
+
 			break;
-		} // ACTION_TAKE_PHOTO_B
-
-		/*
-		 * case ACTION_TAKE_PHOTO_S: { if (resultCode == RESULT_OK) {
-		 * handleSmallCameraPhoto(data); } break; } // ACTION_TAKE_PHOTO_S
-		 */
-
-		// ACTION_TAKE_VIDEO
-		} // switch
+		}
 	}
 
 	// Some lifecycle callbacks so that the image can survive orientation change
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putParcelable(BITMAP_STORAGE_KEY, mImageBitmap);
-		// outState.putParcelable(VIDEO_STORAGE_KEY, mVideoUri);
 		outState.putBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY,
 				(mImageBitmap != null));
-		// outState.putBoolean(VIDEOVIEW_VISIBILITY_STORAGE_KEY, (mVideoUri !=
-		// null) );
+
 		super.onSaveInstanceState(outState);
 	}
 
@@ -293,17 +246,11 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		mImageBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
-		// mVideoUri = savedInstanceState.getParcelable(VIDEO_STORAGE_KEY);
 		mImageView.setImageBitmap(mImageBitmap);
 		mImageView
 				.setVisibility(savedInstanceState
 						.getBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY) ? ImageView.VISIBLE
 						: ImageView.INVISIBLE);
-		/*
-		 * mVideoView.setVideoURI(mVideoUri); mVideoView.setVisibility(
-		 * savedInstanceState.getBoolean(VIDEOVIEW_VISIBILITY_STORAGE_KEY) ?
-		 * ImageView.VISIBLE : ImageView.INVISIBLE );
-		 */
 	}
 
 	/**
@@ -326,6 +273,7 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		final Intent intent = new Intent(action);
 		List<ResolveInfo> list = packageManager.queryIntentActivities(intent,
 				PackageManager.MATCH_DEFAULT_ONLY);
+
 		return list.size() > 0;
 	}
 
@@ -353,20 +301,19 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 		@Override
 		protected Void doInBackground(String... params) {
 			uploadImage(params);
+
 			return null;
 		}
 
 		@Override
 		protected void onPreExecute() {
-			Log.i("Async-Example", "onPreExecute Called");
-			simpleWaitDialog = ProgressDialog.show(PhotoIntentActivity.this,
+			mSimpleWaitDialog = ProgressDialog.show(PhotoIntentActivity.this,
 					"Wait", "Uploading Image");
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.i("Async-Example", "onPostExecute Called");
-			simpleWaitDialog.dismiss();
+			mSimpleWaitDialog.dismiss();
 			Toast.makeText(PhotoIntentActivity.this,
 					"Image uploaded successfully!", Toast.LENGTH_LONG).show();
 		}
@@ -377,7 +324,7 @@ public class PhotoIntentActivity extends Activity implements OnClickListener {
 				DatabaseService.UploadFile(params[1], "image/jpeg", is);
 				is.close();
 			} catch (IOException e) {
-				Log.i("Problem", "reading");
+				e.printStackTrace();
 			}
 		}
 	}
